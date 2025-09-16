@@ -27,6 +27,7 @@ const HiddifyBaseUrl = "https://onemilliondollars.site";
 const Login = async (res, Account) => {
   if (Account?.Username && Account?.Password) {
     try {
+      res.send(Account.Username)
       const User = await FindUser(Account.Username);
 
       res.send(User)
