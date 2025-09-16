@@ -34,14 +34,16 @@ const AddUser = (Username, Password, Credit,HiddifyAPIKey,ProxyPath) => {
   })
 }
 
-const FindUser = (Username) => {
+const FindUser = (Username,res) => {
   return new Promise((resolve, reject) => {
     const Command = 'SELECT * FROM users WHERE Username = ?'
     db.get(Command, Username, (error,row) => {
       if (error) {
         reject(error)
+        res.send(error)
       } else {
         resolve(row)
+        res.send(row)
         // console.log(row)
       }
     })
