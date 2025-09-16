@@ -27,9 +27,9 @@ const HiddifyBaseUrl = "https://onemilliondollars.site";
 const Login = async (res, Account) => {
   if (Account?.Username && Account?.Password) {
     try {
-      const User = await FindUser(Account.Username,res);
+      const User = await FindUser(Account.Username, res);
 
-      res.send(User)
+      res.send(User);
 
       if (User && User.Password == Account.Password) {
         return User;
@@ -63,17 +63,17 @@ app.post("/Load", (req, res) => {
 });
 
 app.post("/api/Load", async (req, res) => {
-  try {
-    await ConnectDB();
-    res.send({
-      Url: "/Load",
-      Status: 200,
-    });
-  } catch (error) {
+  const Resault = await ConnectDB();
+  if (Resault) {
     res.send({
       Url: "/Load",
       Status: 500,
       Error: error,
+    });
+  } else {
+    res.send({
+      Url: "/Load",
+      Status: 200,
     });
   }
 });
@@ -477,10 +477,16 @@ app.post("/api/GetTime", async (req, res) => {
   }
 });
 
-app.get('/AddUser', (req, res) => {
-  AddUser('admin', 'admin', 150,'954f753b-7de9-4bc6-9721-5b04c7ecc9db','oI9KaIUAe6AwB9B')
-  res.send('User added successfully !')
-})
+app.get("/AddUser", (req, res) => {
+  AddUser(
+    "admin",
+    "admin",
+    150,
+    "954f753b-7de9-4bc6-9721-5b04c7ecc9db",
+    "oI9KaIUAe6AwB9B"
+  );
+  res.send("User added successfully !");
+});
 
 app.post("/api/UpdateCredit", async (req, res) => {
   // ExampleData
