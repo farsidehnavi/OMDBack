@@ -8,14 +8,12 @@ const {
   UpdateUserCredit,
 } = require("./DatabaseManagement");
 
-
-
 const app = express();
 
 // Allow any origin
 app.use(
   cors({
-    origin: "https://dashboard.onemilliondollars.site",
+    origin: true, // Accept requests from any origin
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -24,7 +22,7 @@ app.use(
 
 app.use(express.json());
 
-const HiddifyBaseUrl = 'https://onemilliondollars.site'
+const HiddifyBaseUrl = "https://onemilliondollars.site";
 
 const Login = async (res, Account) => {
   if (Account?.Username && Account?.Password) {
@@ -58,9 +56,9 @@ app.get("/Hello", (req, res) => {
   res.send("Hello from Backend !");
 });
 
-app.post('/Load', (req, res) => {
-  res.send('!!!!!!! You hitted /Load !!!!!!')
-})
+app.post("/Load", (req, res) => {
+  res.send("!!!!!!! You hitted /Load !!!!!!");
+});
 
 app.post("/api/Load", (req, res) => {
   try {
@@ -162,7 +160,9 @@ app.post("/api/Profiles2", async (req, res) => {
 const UpdateProfile = async (uuid, User, GB, res) => {
   const options = {
     method: "PATCH",
-    url: HiddifyBaseUrl + `/${User.ProxyPath}/api/v2/admin/user/ed008046-dd8c-48cd-9199-5168eee06715/`,
+    url:
+      HiddifyBaseUrl +
+      `/${User.ProxyPath}/api/v2/admin/user/ed008046-dd8c-48cd-9199-5168eee06715/`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -403,7 +403,7 @@ app.post("/api/GetLink", async (req, res) => {
   }
 });
 
-const GetTimeRequest = async (User,uuid,res) => {
+const GetTimeRequest = async (User, uuid, res) => {
   const options = {
     method: "GET",
     url: HiddifyBaseUrl + `/${User.ProxyPath}/api/v2/admin/user/${uuid}/`,
@@ -415,7 +415,7 @@ const GetTimeRequest = async (User,uuid,res) => {
 
   try {
     const { data } = await axios.request(options);
-    res.send(data)
+    res.send(data);
     return {
       Status: 200,
       Data: data,
@@ -430,10 +430,7 @@ const GetTimeRequest = async (User,uuid,res) => {
   }
 };
 
-function formatRemainingTime(
-  startDateStr,
-  durationDays
-) {
+function formatRemainingTime(startDateStr, durationDays) {
   const start = new Date(startDateStr.replace(" ", "T"));
   const end = new Date(start.getTime() + durationDays * 24 * 60 * 60 * 1000);
   const now = new Date();
@@ -452,16 +449,19 @@ function formatRemainingTime(
   return `${diffDays} day${diffDays > 1 ? "s" : ""} available`;
 }
 
-const GetTime = async (User,uuid,res) => {
-  const Resault = await GetTimeRequest(User, uuid, res)
+const GetTime = async (User, uuid, res) => {
+  const Resault = await GetTimeRequest(User, uuid, res);
   if (Resault.Status == 200) {
     res.send({
       Status: 200,
-      Time: formatRemainingTime(Resault.Data.start_date, Resault.Data.package_days),
-      Url: '/GetTime',
-    })
+      Time: formatRemainingTime(
+        Resault.Data.start_date,
+        Resault.Data.package_days
+      ),
+      Url: "/GetTime",
+    });
   }
-}
+};
 
 app.post("/api/GetTime", async (req, res) => {
   // BodyExample
@@ -471,7 +471,7 @@ app.post("/api/GetTime", async (req, res) => {
   // })
   const User = await Login(res, req.body.Account);
   if (User) {
-    await GetTime(User,req.body.uuid,res)
+    await GetTime(User, req.body.uuid, res);
   }
 });
 
@@ -480,28 +480,30 @@ app.post("/api/GetTime", async (req, res) => {
 //   res.send('User added successfully !')
 // })
 
-app.post('/api/UpdateCredit', async (req, res) => {
+app.post("/api/UpdateCredit", async (req, res) => {
   // ExampleData
   // ({
   //   Account: { ... },
   //   CreditToAdd: 150,
   // })
-  const User = await Login(res, req.body?.Account)
+  const User = await Login(res, req.body?.Account);
   if (User) {
-    UpdateUserCredit(User.Username,User.Credit + req.body?.CreditToAdd)
+    UpdateUserCredit(User.Username, User.Credit + req.body?.CreditToAdd);
   }
   res.send({
     Status: 200,
-    Url: '/UpdateCredit'
-  })
-})
+    Url: "/UpdateCredit",
+  });
+});
 
 app.all("/api/debug-cors", (req, res) => {
   res.send({
     method: req.method,
     origin: req.headers.origin,
-    "access-control-request-method": req.headers["access-control-request-method"],
-    "access-control-request-headers": req.headers["access-control-request-headers"],
+    "access-control-request-method":
+      req.headers["access-control-request-method"],
+    "access-control-request-headers":
+      req.headers["access-control-request-headers"],
     headers: req.headers,
   });
 });
