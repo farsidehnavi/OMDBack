@@ -52,10 +52,13 @@ const AddUser = (Username, Password, Credit,HiddifyAPIKey,ProxyPath) => {
 
 const FindUser = (Username) => {
   return new Promise((resolve, reject) => {
+
+    if (!db) return resolve(new Error("DB not initialized"));
+
     const Command = 'SELECT * FROM users WHERE Username = ?'
     db.get(Command, Username, (error,row) => {
       if (error) {
-        reject(error)
+        resolve(error)
       } else {
         resolve(row)
       }
