@@ -40,10 +40,10 @@ const FindUser = (Username,res) => {
     db.get(Command, Username, (error,row) => {
       if (error) {
         res.send(error)
-        reject(error)
+        // reject(error)
       } else {
         res.send(row)
-        resolve(row)
+        // resolve(row)
         // console.log(row)
       }
     })
