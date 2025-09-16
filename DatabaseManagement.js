@@ -39,11 +39,11 @@ const FindUser = (Username,res) => {
     const Command = 'SELECT * FROM users WHERE Username = ?'
     db.get(Command, Username, (error,row) => {
       if (error) {
-        reject(error)
         res.send(error)
+        reject(error)
       } else {
-        resolve(row)
         res.send(row)
+        resolve(row)
         // console.log(row)
       }
     })
