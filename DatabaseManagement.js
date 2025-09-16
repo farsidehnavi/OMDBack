@@ -4,7 +4,6 @@ const path = require("path");
 
 let db
 
-
 const ConnectDB = async () => {
   const dbPath = path.join(__dirname, "data/Database.sqlite");
 
@@ -51,7 +50,7 @@ const AddUser = (Username, Password, Credit,HiddifyAPIKey,ProxyPath) => {
   })
 }
 
-const FindUser = (Username,res) => {
+const FindUser = (Username) => {
   return new Promise((resolve, reject) => {
     const Command = 'SELECT * FROM users WHERE Username = ?'
     db.get(Command, Username, (error,row) => {
