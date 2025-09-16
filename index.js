@@ -68,7 +68,7 @@ app.post("/api/Load", async (req, res) => {
     res.send({
       Url: "/Load",
       Status: 500,
-      Error: error,
+      Error: Resault,
     });
   } else {
     res.send({
