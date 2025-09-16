@@ -6,7 +6,7 @@ let db
 
 
 const ConnectDB = async () => {
-  const dbPath = path.join(__dirname, "Database.sqlite");
+  const dbPath = path.join(__dirname, "data/Database.sqlite");
 
   return new Promise((resolve, reject) => {
     db = new sqlite.Database(dbPath, (err) => {
