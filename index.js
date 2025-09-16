@@ -5,8 +5,9 @@ const {
   ConnectDB,
   AddUser,
   FindUser,
+  AllUsers,
   UpdateUserCredit,
-} = require("./DatabaseManagement");
+} = require("./db/Functions");
 
 const app = express();
 
@@ -29,7 +30,7 @@ const Login = async (res, Account) => {
     try {
       const User = await FindUser(Account.Username);
 
-      if (User && User.Password == Account.Password) {
+      if (User && User.password == Account.Password) {
         return User;
       } else {
         res.send({
@@ -82,7 +83,7 @@ app.post("/api/Login", async (req, res) => {
     res.send({
       Url: "/Login",
       Status: 200,
-      Credit: User.Credit,
+      Credit: User.credit,
     });
   }
 });
@@ -90,10 +91,10 @@ app.post("/api/Login", async (req, res) => {
 const GetProfiles = async (User, res) => {
   const options = {
     method: "GET",
-    url: HiddifyBaseUrl + `/${User.ProxyPath}/api/v2/admin/user/`,
+    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/user/`,
     headers: {
       Accept: "application/json",
-      "Hiddify-API-Key": User.HiddifyAPIKey,
+      "Hiddify-API-Key": User.hiddifyapikey,
     },
   };
   try {
@@ -162,14 +163,14 @@ const UpdateProfile = async (uuid, User, GB, res) => {
     method: "PATCH",
     url:
       HiddifyBaseUrl +
-      `/${User.ProxyPath}/api/v2/admin/user/ed008046-dd8c-48cd-9199-5168eee06715/`,
+      `/${User.proxypath}/api/v2/admin/user/ed008046-dd8c-48cd-9199-5168eee06715/`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Hiddify-API-Key": User.HiddifyAPIKey,
+      "Hiddify-API-Key": User.hiddifyapikey,
     },
     data: {
-      added_by_uuid: User.HiddifyAPIKey,
+      added_by_uuid: User.hiddifyapikey,
       comment: null,
       current_usage_GB: 0,
       ed25519_private_key: null,
@@ -244,11 +245,11 @@ const UpdateProfile = async (uuid, User, GB, res) => {
 // });
 
 const Renew = async (uuid, User, GB, res) => {
-  if (User.Credit >= GB) {
+  if (User.credit >= GB) {
     const Resault = await UpdateProfile(uuid, User, GB, res);
     res.send(Resault);
     if (Resault.Status == 200) {
-      await UpdateUserCredit(User.Username, User.Credit - GB);
+      await UpdateUserCredit(User.username, User.credit - GB);
     }
   } else {
     res.send({
@@ -278,11 +279,11 @@ app.post("/api/Renew", async (req, res) => {
 const AddProfileRequest = async (User, Name, GB, res) => {
   const options = {
     method: "POST",
-    url: HiddifyBaseUrl + `/${User.ProxyPath}/api/v2/admin/user/`,
+    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/user/`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Hiddify-API-Key": User.HiddifyAPIKey,
+      "Hiddify-API-Key": User.hiddifyapikey,
     },
     data: {
       added_by_uuid: null,
@@ -325,11 +326,11 @@ const AddProfileRequest = async (User, Name, GB, res) => {
 };
 
 const AddProfile = async (User, Name, GB, res) => {
-  if (User.Credit >= GB) {
+  if (User.credit >= GB) {
     const Resault = await AddProfileRequest(User, Name, GB, res);
     res.send(Resault);
     if (Resault.Status == 200) {
-      await UpdateUserCredit(User.Username, User.Credit - GB);
+      await UpdateUserCredit(User.username, User.credit - GB);
     }
   } else {
     res.send({
@@ -406,10 +407,10 @@ app.post("/api/GetLink", async (req, res) => {
 const GetTimeRequest = async (User, uuid, res) => {
   const options = {
     method: "GET",
-    url: HiddifyBaseUrl + `/${User.ProxyPath}/api/v2/admin/user/${uuid}/`,
+    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/user/${uuid}/`,
     headers: {
       Accept: "application/json",
-      "Hiddify-API-Key": User.HiddifyAPIKey,
+      "Hiddify-API-Key": User.hiddifyapikey,
     },
   };
 
@@ -475,7 +476,7 @@ app.post("/api/GetTime", async (req, res) => {
   }
 });
 
-app.get("/AddUser", (req, res) => {
+app.post("/AddUser", (req, res) => {
   AddUser(
     "admin",
     "admin",
@@ -486,7 +487,7 @@ app.get("/AddUser", (req, res) => {
   res.send("User added successfully !");
 });
 
-app.post("/api/UpdateCredit", async (req, res) => {
+app.post("/UpdateCredit", async (req, res) => {
   // ExampleData
   // ({
   //   Account: { ... },
@@ -494,13 +495,21 @@ app.post("/api/UpdateCredit", async (req, res) => {
   // })
   const User = await Login(res, req.body?.Account);
   if (User) {
-    UpdateUserCredit(User.Username, User.Credit + req.body?.CreditToAdd);
+    UpdateUserCredit(User.username, User.credit + req.body?.CreditToAdd);
   }
   res.send({
     Status: 200,
     Url: "/UpdateCredit",
   });
 });
+
+app.post("/AllUsers", async (req, res) => {
+  res.send(await AllUsers())
+})
+
+app.post('/Row', async (req, res) => {
+  res.send(await FindUser('admin'))
+})
 
 app.all("/api/debug-cors", (req, res) => {
   res.send({
