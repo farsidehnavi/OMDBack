@@ -29,7 +29,7 @@ const ConnectDB = async () => {
         (err) => {
           if (err) {
             console.error("Failed to create table:", err.message);
-            reject(error);
+            reject(err);
           } else {
             resolve();
           }
