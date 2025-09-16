@@ -23,7 +23,7 @@ app.use(
 
 app.use(express.json());
 
-const HiddifyBaseUrl = "https://onemilliondollars.site";
+const HiddifyBaseUrl = "http://195.248.243.65";
 
 const Login = async (res, Account) => {
   if (Account?.Username && Account?.Password) {
