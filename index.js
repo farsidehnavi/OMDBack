@@ -29,6 +29,8 @@ const Login = async (res, Account) => {
     try {
       const User = await FindUser(Account.Username);
 
+      res.send(User)
+
       if (User && User.Password == Account.Password) {
         return User;
       } else {
