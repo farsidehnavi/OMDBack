@@ -1,27 +1,44 @@
 const sqlite = require('sqlite3').verbose()
+const { error } = require('console');
+const path = require("path");
 
 let db
 
-const ConnectDB = async () => {
-  db = new sqlite.Database('Database.sqlite', (error) => {
-    if (error) {
-      console.error(error)
-    } else {
-      // console.log('Connected to DB')
-    }
-  })
 
-  await db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      Username TEXT UNIQUE NOT NULL,
-      Password TEXT NOT NULL,
-      Credit NUMBER NOT NULL,
-      HiddifyAPIKey TEXT UNIQUE NOT NULL,
-      ProxyPath TEXT NOT NULL
-    )
-`);
-}
+const ConnectDB = async () => {
+  const dbPath = path.join(__dirname, "Database.sqlite");
+
+  return new Promise((resolve, reject) => {
+    db = new sqlite.Database(dbPath, (err) => {
+      if (err) {
+        console.error("Failed to open DB:", err.message);
+        return reject(false); // return false on error
+      }
+
+      db.run(
+        `
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          Username TEXT UNIQUE NOT NULL,
+          Password TEXT NOT NULL,
+          Credit NUMBER NOT NULL,
+          HiddifyAPIKey TEXT UNIQUE NOT NULL,
+          ProxyPath TEXT NOT NULL
+        )
+      `,
+        (err) => {
+          if (err) {
+            console.error("Failed to create table:", err.message);
+            reject(error);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  });
+};
+
 
 const AddUser = (Username, Password, Credit,HiddifyAPIKey,ProxyPath) => {
   const Command = 'INSERT INTO users (Username,Password,Credit,HiddifyAPIKey,ProxyPath) VALUES (?,?,?,?,?)'
@@ -39,12 +56,9 @@ const FindUser = (Username,res) => {
     const Command = 'SELECT * FROM users WHERE Username = ?'
     db.get(Command, Username, (error,row) => {
       if (error) {
-        res.send(error)
-        // reject(error)
+        reject(error)
       } else {
-        res.send(row)
-        // resolve(row)
-        // console.log(row)
+        resolve(row)
       }
     })
   })

@@ -62,9 +62,9 @@ app.post("/Load", (req, res) => {
   res.send("!!!!!!! You hitted /Load !!!!!!");
 });
 
-app.post("/api/Load", (req, res) => {
+app.post("/api/Load", async (req, res) => {
   try {
-    ConnectDB();
+    await ConnectDB();
     res.send({
       Url: "/Load",
       Status: 200,
