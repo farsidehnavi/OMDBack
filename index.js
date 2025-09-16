@@ -477,12 +477,19 @@ app.post("/api/GetTime", async (req, res) => {
 });
 
 app.post("/AddUser", (req, res) => {
+  // AddUser(
+  //   "admin",
+  //   "admin",
+  //   150,
+  //   "954f753b-7de9-4bc6-9721-5b04c7ecc9db",
+  //   "oI9KaIUAe6AwB9B"
+  // );
   AddUser(
-    "admin",
-    "admin",
-    150,
-    "954f753b-7de9-4bc6-9721-5b04c7ecc9db",
-    "oI9KaIUAe6AwB9B"
+    req?.body?.Username,
+    req?.body?.Password,
+    req?.body?.Credit,
+    req?.body?.HiddifyApiKey,
+    req?.body?.ProxyPath
   );
   res.send("User added successfully !");
 });
