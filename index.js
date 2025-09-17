@@ -89,9 +89,10 @@ app.post("/api/Login", async (req, res) => {
 });
 
 const GetProfiles = async (User, res) => {
+
   const options = {
     method: "GET",
-    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/all-configs/`,
+    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/user/`,
     headers: {
       Accept: "application/json",
       "Hiddify-API-Key": User.hiddifyapikey,
@@ -103,7 +104,7 @@ const GetProfiles = async (User, res) => {
     res.send({
       Url: "/Profiles",
       Status: 200,
-      Data: response.data.users,
+      Data: response.data,
     });
   } catch (error) {
     res.send({
@@ -360,7 +361,7 @@ app.post("/api/AddProfile", async (req, res) => {
 const LinkRequest = async (uuid, User, res) => {
   const options = {
     method: "GET",
-    url: HiddifyBaseUrl + "/mePIT60jMyCu/api/v2/user/all-configs/",
+    url: HiddifyBaseUrl + "/Im8espfFQ0FfThFF4y/api/v2/user/all-configs/",
     headers: {
       Accept: "application/json",
       "Hiddify-API-Key": uuid,
