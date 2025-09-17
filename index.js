@@ -91,7 +91,7 @@ app.post("/api/Login", async (req, res) => {
 const GetProfiles = async (User, res) => {
   const options = {
     method: "GET",
-    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/user/`,
+    url: HiddifyBaseUrl + `/${User.proxypath}/api/v2/admin/all-configs/`,
     headers: {
       Accept: "application/json",
       "Hiddify-API-Key": User.hiddifyapikey,
