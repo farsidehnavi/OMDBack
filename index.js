@@ -360,7 +360,7 @@ app.post("/api/AddProfile", async (req, res) => {
 const LinkRequest = async (uuid, User, res) => {
   const options = {
     method: "GET",
-    url: HiddifyBaseUrl + "/XsaTUPj2mABSXD3LgO/api/v2/user/all-configs/",
+    url: HiddifyBaseUrl + "/Im8espfFQ0FfThFF4y/api/v2/user/all-configs/",
     headers: {
       Accept: "application/json",
       "Hiddify-API-Key": uuid,
