@@ -163,7 +163,7 @@ const UpdateProfile = async (uuid, User, GB, res) => {
     method: "PATCH",
     url:
       HiddifyBaseUrl +
-      `/${User.proxypath}/api/v2/admin/user/ed008046-dd8c-48cd-9199-5168eee06715/`,
+      `/${User.proxypath}/api/v2/admin/user/${User.hiddifyapikey}/`,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
