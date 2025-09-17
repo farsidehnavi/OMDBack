@@ -103,7 +103,7 @@ const GetProfiles = async (User, res) => {
     res.send({
       Url: "/Profiles",
       Status: 200,
-      Data: response.data,
+      Data: response.data.users,
     });
   } catch (error) {
     res.send({
